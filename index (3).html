@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#7be08a"><title>Plant Doctor</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Atkinson+Hyperlegible:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&display=swap">
+<style>
+:root{--ink:#14141e;--bg:#fff0eb;--card:#fff;--red:#ff5a5f;--org:#ff9f43;--yel:#ffe45c;--grn:#7be08a;--blue:#6ea8ff;--mute:#4a4a5a;--dots:#f3d9d2;
+--display:"Archivo Black","Arial Black",system-ui,sans-serif;--body:"Atkinson Hyperlegible","Noto Sans Devanagari",system-ui,sans-serif;color-scheme:light}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font:17px/1.5 var(--body);margin:0;background-image:radial-gradient(var(--dots) 1.6px,transparent 1.7px);background-size:36px 36px;
+padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.bar{background:var(--grn);border:3px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--ink);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+h1{font:28px var(--display);margin:0}
+a.tag,.tag{background:#fff;border:3px solid var(--ink);border-radius:999px;padding:3px 14px;font-weight:700;font-size:14px;color:var(--ink);text-decoration:none;cursor:pointer}
+.card{background:var(--card);border:3px solid var(--ink);border-radius:12px;box-shadow:6px 6px 0 var(--ink);padding:16px;min-width:0}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.cam{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:var(--red);border:3px solid var(--ink);border-radius:18px;box-shadow:6px 6px 0 var(--ink);min-height:170px;cursor:pointer;font:22px var(--display);text-align:center;padding:16px}
+.cam svg{width:64px;height:64px}.cam:active{transform:translate(4px,4px);box-shadow:2px 2px 0 var(--ink)}
+.cam:focus-within,button:focus-visible,.btn:focus-visible,input:focus-visible,select:focus-visible{outline:4px solid var(--blue);outline-offset:3px}
+.sub{font:400 15px var(--body);margin:0}
+.btn,button.btn{background:var(--yel);border:3px solid var(--ink);border-radius:999px;padding:8px 16px;font:700 15px var(--body);cursor:pointer;color:var(--ink);text-align:center}
+.btn.sm{padding:3px 10px;font-size:13px}.btn.red{background:var(--red)}.btn.grn{background:var(--grn)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+#pic{width:100%;max-height:300px;object-fit:cover;border:3px solid var(--ink);border-radius:10px;display:block}
+.lang{display:flex}.lang button{font:700 14px var(--body);border:3px solid var(--ink);background:#fff;padding:5px 14px;cursor:pointer;color:var(--ink)}
+.lang button:first-child{border-radius:999px 0 0 999px;border-right-width:1.5px}.lang button:last-child{border-radius:0 999px 999px 0;border-left-width:1.5px}
+.lang button[aria-pressed=true]{background:var(--ink);color:var(--yel)}
+.name{font:26px/1.15 var(--display);margin:6px 0 2px;text-wrap:balance}.meta{color:var(--mute);margin:0 0 10px}
+.pill{display:inline-block;border:3px solid var(--ink);border-radius:999px;padding:1px 12px;font-weight:700;font-size:14px;margin-right:6px}
+h2{font:17px var(--display);margin:16px 0 6px}h3{font:15px var(--display);margin:0 0 8px}
+ul,ol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px}
+.cure{background:#c9f7e1;border:3px solid var(--ink);border-radius:10px;padding:12px 14px;margin-top:14px}.cure h2{margin-top:0}
+.warn{background:var(--yel);border:3px solid var(--ink);border-radius:10px;padding:10px 14px;font-size:15px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.spin{width:34px;height:34px;border:5px solid var(--ink);border-top-color:var(--red);border-radius:50%;animation:s .9s linear infinite}
+@keyframes s{to{transform:rotate(360deg)}}@media (prefers-reduced-motion:reduce){.spin{animation-duration:3s}}
+.load{display:flex;align-items:center;gap:14px;margin-top:14px}
+small,.small{color:var(--mute);display:block;margin-top:10px;font-size:13px}
+/* chat */
+#log{display:flex;flex-direction:column;gap:8px;margin:10px 0;max-height:360px;overflow-y:auto}
+.b{border:3px solid var(--ink);border-radius:12px;padding:8px 12px;max-width:92%;white-space:pre-wrap;overflow-wrap:anywhere;font-size:16px}
+.b.user{align-self:flex-end;background:var(--yel)}.b.ai{align-self:flex-start;background:#c9f7e1}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.chips button{font:700 13px var(--body)}
+.ask{display:flex;gap:8px}.ask input{flex:1;min-width:0}
+input[type=text],input[type=password],input[type=number],select{font:16px var(--body);padding:8px 12px;border:3px solid var(--ink);border-radius:10px;background:#fff;color:var(--ink);width:100%}
+/* settings */
+label.f{display:block;font-weight:700;margin:12px 0 4px}
+.help{font-size:14px;color:var(--mute);margin:4px 0 0}
+.mrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;border:3px solid var(--ink);border-radius:10px;padding:6px 8px;margin-top:8px;background:#fff}
+.st{font:700 12px var(--body);margin-top:2px;color:var(--mute)}.mrow .id{flex:1 1 170px;min-width:0;font:13px/1.3 ui-monospace,Menlo,monospace;overflow-wrap:anywhere}
+.mrow .n{background:var(--ink);color:#fff;border-radius:50%;width:24px;height:24px;display:grid;place-items:center;font-size:13px;flex:none}
+.mrow label{font-size:12px;display:flex;gap:4px;align-items:center;flex:none}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media (max-width:420px){.grid{grid-template-columns:1fr}}
+.ok{color:#0a6b2a;font-weight:700}.bad{color:#b3002d;font-weight:700}
+</style></head><body>
+
+<main id="home">
+  <div class="bar"><h1>Plant Doctor</h1><a class="tag" href="#settings" id="gear">Settings</a></div>
+  <label class="cam" for="shot">
+    <svg viewBox="0 0 64 64" fill="none" stroke="#14141e" stroke-width="4" stroke-linejoin="round" aria-hidden="true"><path d="M8 20h12l4-7h16l4 7h12v32H8z" fill="#fff"/><circle cx="32" cy="35" r="10" fill="#ffe45c"/></svg>
+    <span id="camTxt"></span><span class="sub" id="camSub"></span>
+    <input class="sr" id="shot" type="file" accept="image/*" capture="environment">
+  </label>
+  <div class="row">
+    <label class="btn" for="pick" id="galTxt">Choose from gallery</label><input class="sr" id="pick" type="file" accept="image/*">
+    <div class="lang" role="group" aria-label="Language"><button id="en" aria-pressed="true">English</button><button id="hi" aria-pressed="false">हिन्दी</button></div>
+  </div>
+  <div class="warn" id="notice" hidden><span id="noticeTxt"></span><a class="btn sm" href="#settings">Settings</a></div>
+  <div class="card" id="out" hidden aria-live="polite"></div>
+  <div class="card" id="chatCard" hidden>
+    <h3 id="chatH"></h3>
+    <div id="log" aria-live="polite"></div>
+    <div class="chips" id="chips"></div>
+    <form class="ask" id="askForm"><input type="text" id="q" autocomplete="off" maxlength="300"><button class="btn grn" id="send" type="submit"></button></form>
+    <div class="row" style="margin-top:8px"><button class="btn sm" id="newChat" type="button"></button><span class="small" id="meter" style="margin:0"></span></div>
+  </div>
+</main>
+
+<main id="settings" hidden>
+  <div class="bar"><h1>Settings</h1><a class="tag" href="#" id="back">Back</a></div>
+
+  <div class="card">
+    <h3>1. API keys</h3>
+    <p class="help">Add one or more. Keys are saved only in this browser and sent only to that provider. Providers without a key are skipped.</p>
+    <div id="keys"></div>
+  </div>
+
+  <div class="card">
+    <h3>2. Models, tried in this order</h3>
+    <p class="help">The first model that answers wins, then the next one takes over. Press "Check models" to see which ones work with your keys.</p>
+    <div id="mlist"></div>
+    <div class="row" style="margin-top:12px"><button class="btn sm grn" id="checkModels" type="button">Check models</button><button class="btn sm red" id="resetModels" type="button">Reset list</button></div>
+    <p class="help" id="modelMsg" aria-live="polite"></p>
+
+    <h3 style="margin-top:20px">Pick from a provider's list</h3>
+    <div class="grid"><div><label class="f" for="bp">Provider</label><select id="bp"></select></div><div><label class="f" for="bf">Filter</label><input type="text" id="bf" placeholder="e.g. gemini, llama" spellcheck="false"></div></div>
+    <label class="help" style="display:flex;gap:6px;align-items:center;margin-top:8px"><input type="checkbox" id="bfree" checked> OpenRouter: show free models only</label>
+    <div class="row" style="margin-top:10px"><button class="btn sm" id="bgo" type="button">Load list</button></div>
+    <p class="help" id="bmsg" aria-live="polite"></p>
+    <div id="blist"></div>
+
+    <h3 style="margin-top:20px">Add by name</h3>
+    <div class="grid"><div><label class="f" for="addP">Provider</label><select id="addP"></select></div><div><label class="f" for="newModel">Model name</label><input type="text" id="newModel" placeholder="copy it from the provider" spellcheck="false"></div></div>
+    <label class="help" style="display:flex;gap:6px;align-items:center;margin-top:8px"><input type="checkbox" id="newVision" checked> This model can see photos</label>
+    <div class="row" style="margin-top:10px"><button class="btn sm grn" id="addModel" type="button">Add to list</button></div>
+    <p class="help" id="addMsg" aria-live="polite"></p>
+  </div>
+
+  <div class="card">
+    <h3>3. Token limits</h3>
+    <p class="help">Lower numbers make long chats cheaper and faster and keep you inside free limits.</p>
+    <div class="grid">
+      <div><label class="f" for="maxOut">Diagnosis answer (tokens)</label><input type="number" id="maxOut" min="200" max="2000" step="50"></div>
+      <div><label class="f" for="chatOut">Chat answer (tokens)</label><input type="number" id="chatOut" min="100" max="1000" step="50"></div>
+      <div><label class="f" for="turns">Chat turns remembered</label><input type="number" id="turns" min="1" max="12"></div>
+      <div><label class="f" for="budget">Chat context budget (tokens)</label><input type="number" id="budget" min="600" max="8000" step="100"></div>
+      <div><label class="f" for="img">Photo size (pixels)</label><input type="number" id="img" min="384" max="1280" step="64"></div>
+    </div>
+    <p class="help">The photo is sent once, then chat uses a short text summary of the diagnosis. Only the last few turns are sent, older questions shrink to a short note, and replies are kept short.</p>
+    <div class="row" style="margin-top:8px"><span class="small" id="usage" style="margin:0"></span><button class="btn sm red" id="resetLimits" type="button">Default limits</button></div>
+  </div>
+</main>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const PROV={
+ or:{name:"OpenRouter",base:"https://openrouter.ai/api/v1",link:"https://openrouter.ai/keys",note:"Free models end in :free. Paid models need credit on your account."},
+ gg:{name:"Google AI Studio",base:"https://generativelanguage.googleapis.com/v1beta/openai",link:"https://aistudio.google.com/apikey",note:"Gemini models, with a free tier that has daily limits."},
+ gq:{name:"Groq",base:"https://api.groq.com/openai/v1",link:"https://console.groq.com/keys",note:"Very fast Llama models, with a free tier that has limits."}};
+const DEF={keys:{or:"",gg:"",gq:""},models:null,maxOut:700,chatOut:350,turns:6,budget:2500,img:768,lang:"en"};
+const SEED=[{p:"gg",id:"gemini-2.5-flash",vision:true},{p:"gq",id:"meta-llama/llama-4-scout-17b-16e-instruct",vision:true},
+ {p:"or",id:"google/gemma-3-27b-it:free",vision:true},{p:"or",id:"mistralai/mistral-small-3.2-24b-instruct:free",vision:true},
+ {p:"gq",id:"llama-3.3-70b-versatile",vision:false},{p:"or",id:"meta-llama/llama-3.3-70b-instruct:free",vision:false}];
+let S=loadS();
+function loadS(){let s={};try{s=JSON.parse(localStorage.getItem("pd_s")||"{}")}catch(e){}
+ s={...DEF,...s};s.keys={...DEF.keys,...(s.keys||{})};if(s.key){s.keys.or=s.keys.or||s.key;delete s.key}
+ if(!Array.isArray(s.models)||!s.models.length)s.models=SEED.map(m=>({...m}));
+ s.models=s.models.filter(m=>m&&m.id).map(m=>({p:PROV[m.p]?m.p:"or",id:String(m.id),vision:!!m.vision,st:m.st}));return s}
+function saveS(){try{localStorage.setItem("pd_s",JSON.stringify(S))}catch(e){}}
+const hasKey=p=>!!S.keys[p],anyKey=()=>Object.keys(PROV).some(hasKey),label=m=>PROV[m.p].name+": "+m.id;
+let lang=S.lang==="hi"?"hi":"en",data=null,pic=null,chat=[],ctxLine="",busy=false,sessTok=0,lastTok=0;
+const bad=new Map();
+
+const UI={en:{cam:"Take photo of sick plant",sub:"Hold the camera close to the damaged leaf",again:"Take another photo",gal:"Choose from gallery",
+ think:"Checking your plant...",sym:"What I see",cure:"Treatment",prev:"Prevention",expert:"When to ask an expert",plant:"Plant",conf:"Confidence",sev:"Severity",
+ note:"This is an AI suggestion from a photo. Check with your local Krishi Vigyan Kendra or agriculture officer before spraying. Follow the pesticide label and wear gloves and a mask.",
+ notplant:"I could not see a plant in this photo. Move closer to one leaf and try again.",healthy:"Looks healthy",by:"Answered by",
+ nokey:"Add a free API key in Settings to start (OpenRouter, Google AI Studio or Groq).",chatH:"Ask a follow-up question",ph:"Type your question",send:"Send",newc:"New chat",thinking:"Thinking...",tokens:"tokens",session:"Session",last:"Last",
+ chips:["Cheapest treatment?","How much to spray per litre?","Is it safe for other crops?","Organic option?"],
+ errs:{nokey:"Add an API key in Settings first.",auth:"Your API key was not accepted. Check it in Settings.",rate:"The free models are busy. Wait a minute and try again.",all:"No model could answer right now. Try again in a minute, or change models in Settings.",nomodel:"No photo-capable model has a key. Add a key or a model in Settings.",def:"Could not check. Check your internet and try again."}},
+ hi:{cam:"बीमार पौधे की फोटो लें",sub:"कैमरा खराब पत्ते के पास रखें",again:"दूसरी फोटो लें",gal:"गैलरी से चुनें",
+ think:"आपके पौधे की जाँच हो रही है...",sym:"क्या दिख रहा है",cure:"इलाज",prev:"बचाव",expert:"विशेषज्ञ से कब पूछें",plant:"पौधा",conf:"भरोसा",sev:"गंभीरता",
+ note:"यह फोटो से एक AI सुझाव है। छिड़काव से पहले अपने कृषि विज्ञान केंद्र या कृषि अधिकारी से पूछें। दवा के लेबल का पालन करें, दस्ताने और मास्क पहनें।",
+ notplant:"इस फोटो में पौधा नहीं दिखा। एक पत्ते के पास जाकर फिर कोशिश करें।",healthy:"पौधा स्वस्थ दिखता है",by:"उत्तर देने वाला",
+ nokey:"शुरू करने के लिए Settings में मुफ़्त API key डालें (OpenRouter, Google AI Studio या Groq)।",chatH:"आगे का सवाल पूछें",ph:"अपना सवाल लिखें",send:"भेजें",newc:"नई चैट",thinking:"सोच रहा हूँ...",tokens:"टोकन",session:"कुल",last:"पिछला",
+ chips:["सबसे सस्ता इलाज?","प्रति लीटर कितना छिड़कें?","क्या दूसरी फसलों के लिए सुरक्षित है?","जैविक उपाय?"],
+ errs:{nokey:"पहले Settings में API key डालें।",auth:"आपकी API key स्वीकार नहीं हुई। Settings में जाँचें।",rate:"मुफ़्त मॉडल व्यस्त हैं। एक मिनट बाद फिर कोशिश करें।",all:"अभी कोई मॉडल जवाब नहीं दे सका। एक मिनट बाद कोशिश करें या Settings में मॉडल बदलें।",nomodel:"फोटो देखने वाले किसी मॉडल की key नहीं है। Settings में key या मॉडल जोड़ें।",def:"जाँच नहीं हो सकी। इंटरनेट देखकर फिर कोशिश करें।"}}};
+const t=()=>UI[lang];
+function mk(tag,txt,cls){const e=document.createElement(tag);if(txt!=null)e.textContent=txt;if(cls)e.className=cls;return e}
+function list(tag,items){const l=mk(tag);(Array.isArray(items)?items:[]).forEach(i=>l.append(mk("li",String(i))));return l}
+const clip=(s,n)=>String(s||"").slice(0,n);
+
+/* ---------- token helpers ---------- */
+const est=s=>Math.ceil(s.length/(/[ऀ-ॿ]/.test(s)?1.6:3.6));
+async function toJpeg(file){const b=await createImageBitmap(file);const k=Math.min(1,S.img/Math.max(b.width,b.height));
+ const cv=document.createElement("canvas");cv.width=Math.round(b.width*k);cv.height=Math.round(b.height*k);
+ cv.getContext("2d").drawImage(b,0,0,cv.width,cv.height);return cv.toDataURL("image/jpeg",0.72)}
+
+/* ---------- one call path for all providers (all speak the OpenAI format) ---------- */
+function hdr(p){const h={Authorization:"Bearer "+S.keys[p],"Content-Type":"application/json"};
+ if(p==="or"){h["HTTP-Referer"]=location.origin&&location.origin!=="null"?location.origin:"https://plant-doctor.local";h["X-Title"]="Plant Doctor"}return h}
+function errMsg(j){const e=Array.isArray(j)?j[0]&&j[0].error:j&&j.error;if(!e)return"";
+ return String(e.message||"")+(e.metadata&&e.metadata.raw?" "+String(e.metadata.raw).slice(0,120):"")}
+function parseJSON(text){const a=text.indexOf("{"),b=text.lastIndexOf("}");if(a<0||b<a)throw {code:"json",msg:"answer was not JSON"};
+ let o;try{o=JSON.parse(text.slice(a,b+1))}catch(e){throw {code:"json",msg:"answer was not valid JSON"}}
+ if(!o||typeof o!=="object"||(o.valid!==false&&!o.disease))throw {code:"json",msg:"answer was missing fields"};return o}
+async function callAI(messages,o){
+ if(!anyKey())throw {code:"nokey"};
+ const pool=S.models.filter(m=>hasKey(m.p)&&(!o.vision||m.vision));if(!pool.length)throw {code:"nomodel"};
+ const now=Date.now(),k=m=>m.p+m.id,order=[...pool.filter(m=>(bad.get(k(m))||0)<now),...pool.filter(m=>(bad.get(k(m))||0)>=now)];
+ let last={code:"all"},rate=0,tried=0,auth=0;const dead=new Set(),fails=[];
+ for(const m of order){
+  if(dead.has(m.p))continue;tried++;
+  const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),o.timeout||50000);
+  try{
+   let mt=o.maxTokens;
+   for(let a=0;;a++){
+    const r=await fetch(PROV[m.p].base+"/chat/completions",{method:"POST",signal:ctl.signal,headers:hdr(m.p),
+     body:JSON.stringify({model:m.id,messages,max_tokens:mt,temperature:0.2})});
+    if(r.status===401){dead.add(m.p);throw {code:"auth",msg:PROV[m.p].name+" key not accepted"}}
+    const j=await r.json().catch(()=>null),em=errMsg(j);
+    if(r.status===402)throw {code:"credit",msg:"needs credit on this account. Use a free model or add credit"};
+    if(r.status===429||(j&&!Array.isArray(j)&&j.error&&j.error.code===429))throw {code:"rate",msg:em||"busy"};
+    if(!r.ok||!j||em)throw {code:"model",msg:"HTTP "+r.status+(em?": "+em:"")};
+    const ch=j.choices&&j.choices[0],c=ch&&ch.message&&ch.message.content;
+    const text=typeof c==="string"?c:Array.isArray(c)?c.map(p=>p.text||"").join(""):"";
+    if(!text.trim()){
+     if(a===0&&ch&&ch.finish_reason==="length"){mt=Math.min(Math.round(mt*2.5),3000);continue}
+     throw {code:"empty",msg:ch&&ch.finish_reason==="length"?"ran out of tokens while thinking (use a non-reasoning model)":"empty reply"}}
+    const out=o.json?parseJSON(text):text.trim();
+    return {out,model:label(m),usage:j.usage||null,sent:est(JSON.stringify(messages))};
+   }
+  }catch(e){
+   const code=e&&e.code?e.code:(e&&e.name==="AbortError"?"timeout":"net");
+   if(code==="rate")rate++;if(code==="auth")auth++;
+   last={code,model:label(m),msg:(e&&e.msg)||(code==="timeout"?"took too long":code==="net"?"no connection or blocked by the browser":code)};fails.push(last);bad.set(k(m),Date.now()+60000);
+  }finally{clearTimeout(to)}
+ }
+ throw rate&&rate===tried?{code:"rate",last,fails}:auth&&auth>=tried?{code:"auth",last,fails}:{code:"all",last,fails};
+}
+function meter(r){const n=(r.usage&&r.usage.total_tokens)||r.sent;lastTok=n;sessTok+=n;
+ $("meter").textContent=`${t().last}: ${n} ${t().tokens} · ${t().session}: ${sessTok}`;usageLine()}
+const errText=e=>(t().errs[e&&e.code]||t().errs.def)+(e&&e.fails&&e.fails.length?"\n"+e.fails.slice(0,6).map(f=>`\u2022 ${f.model}: ${clip(f.msg,100)}`).join("\n"):e&&e.last&&e.last.msg?`\n(${e.last.model}: ${clip(e.last.msg,170)})`:"");
+
+/* ---------- diagnosis ---------- */
+const dxPrompt=l=>`Plant doctor for Indian farmers. Look at the photo. Reply with ONLY this JSON, in ${l==="hi"?"simple Hindi":"English"}:
+{"valid":true,"plant":"","disease":"most likely disease, pest or deficiency","healthy":false,"conf":"high|medium|low","sev":"none|mild|moderate|severe","sym":["max 3 short"],"cure":["3-5 short steps: cheap or organic first, then chemical with active ingredient and label dose"],"prev":["max 3 short"],"expert":"one short sentence"}
+valid=false if no plant is visible. Be brief. If unsure, name the most likely cause and say so in expert.`;
+function say(msg,load){const o=$("out");o.hidden=false;o.replaceChildren();
+ if(pic){const im=mk("img");im.id="pic";im.alt="Your plant photo";im.src=pic;o.append(im)}
+ const w=mk("div",null,load?"load":"");if(load)w.append(mk("div",null,"spin"));
+ const pp=mk("p",msg,"sub");pp.style.whiteSpace="pre-wrap";pp.style.overflowWrap="anywhere";w.append(pp);if(!load)w.style.marginTop="14px";o.append(w)}
+async function diagnose(file){
+ if(!file)return;if(!anyKey()){say(t().errs.nokey);return}
+ data=null;chat=[];$("log").replaceChildren();$("chatCard").hidden=true;chrome();
+ try{pic=await toJpeg(file);say(t().think,true);
+  const r=await callAI([{role:"user",content:[{type:"text",text:dxPrompt(lang)},{type:"image_url",image_url:{url:pic}}]}],{vision:true,maxTokens:S.maxOut,json:true});
+  data=r.out;data.lang=lang;data.model=r.model;ctxLine=clip(`${data.plant}; ${data.disease}; severity ${data.sev}; steps: ${(data.cure||[]).join(" | ")}`,500);
+  render();meter(r)}
+ catch(e){say(errText(e))}
+}
+function render(){chrome();const o=$("out");o.replaceChildren();o.hidden=false;
+ if(pic){const im=mk("img");im.id="pic";im.alt="Your plant photo";im.src=pic;o.append(im)}
+ if(!data.valid){o.append(mk("h2",t().notplant));$("chatCard").hidden=true;return}
+ const d=data,col={none:"#7be08a",mild:"#ffe45c",moderate:"#ff9f43",severe:"#ff5a5f"}[d.sev]||"#ffe45c";
+ if(d.healthy)o.append(mk("p",t().healthy,"meta"));
+ o.append(mk("div",d.disease,"name"),mk("p",t().plant+": "+d.plant,"meta"));
+ const p=mk("div"),a=mk("span",t().sev+": "+d.sev,"pill");a.style.background=col;const b=mk("span",t().conf+": "+d.conf,"pill");b.style.background="#fff";p.append(a,b);o.append(p);
+ o.append(mk("h2",t().sym),list("ul",d.sym));
+ const c=mk("div",null,"cure");c.append(mk("h2",t().cure),list("ol",d.cure));o.append(c);
+ o.append(mk("h2",t().prev),list("ul",d.prev),mk("h2",t().expert),mk("p",d.expert,"sub"),mk("small",t().note),mk("small",t().by+" "+d.model));
+ $("chatCard").hidden=false}
+async function translate(){ if(!data||!data.valid||data.lang===lang)return;
+ say(t().think,true);
+ try{const r=await callAI([{role:"user",content:`Translate the string values of this JSON into ${lang==="hi"?"simple Hindi":"English"}. Keep keys and the values of valid, healthy, conf, sev unchanged. Reply with ONLY the JSON.\n`+JSON.stringify({plant:data.plant,disease:data.disease,valid:true,healthy:data.healthy,conf:data.conf,sev:data.sev,sym:data.sym,cure:data.cure,prev:data.prev,expert:data.expert})}],{vision:false,maxTokens:S.maxOut,json:true});
+  data={...r.out,lang,model:r.model,valid:true};ctxLine=clip(`${data.plant}; ${data.disease}; severity ${data.sev}; steps: ${(data.cure||[]).join(" | ")}`,500);render();meter(r)}
+ catch(e){render()}}
+
+/* ---------- chat with trimmed context ---------- */
+function buildChat(q){
+ const sys=`You are Plant Doctor helping an Indian farmer. Reply in ${lang==="hi"?"simple Hindi":"simple English"}, under 80 words, practical, cheap options first, mention label dose and safety. Diagnosis: ${ctxLine}`;
+ const keep=S.turns*2;let hist=chat.slice(-keep).map(m=>({role:m.role,content:m.role==="assistant"?clip(m.content,500):m.content}));
+ let mem=chat.slice(0,Math.max(0,chat.length-keep)).filter(m=>m.role==="user").map(m=>clip(m.content,60)).join("; ");
+ const build=()=>{const msgs=[...hist,{role:"user",content:q}];
+  msgs[0]={role:"user",content:sys+(mem?` Earlier questions: ${clip(mem,240)}.`:"")+"\n\n"+msgs[0].content};return msgs};
+ while(hist.length>=2&&est(JSON.stringify(build()))>S.budget){const a=hist.shift(),b=hist.shift();if(a&&a.role==="user")mem+=(mem?"; ":"")+clip(a.content,60)}
+ return build()}
+function bubble(role,text){const b=mk("div",text,"b "+role);$("log").append(b);$("log").scrollTop=1e9;return b}
+async function sendChat(q){q=clip(q.trim(),300);if(!q||busy||!data)return;busy=true;$("send").disabled=true;
+ bubble("user",q);const w=bubble("ai",t().thinking);$("q").value="";
+ try{const r=await callAI(buildChat(q),{vision:false,maxTokens:S.chatOut});w.textContent=r.out;chat.push({role:"user",content:q},{role:"assistant",content:r.out});meter(r)}
+ catch(e){w.textContent=errText(e)}
+ busy=false;$("send").disabled=false;$("q").focus()}
+
+/* ---------- home UI ---------- */
+function chrome(){const u=t();$("camTxt").textContent=data||pic?u.again:u.cam;$("camSub").textContent=u.sub;$("camSub").hidden=!!(data||pic);$("galTxt").textContent=u.gal;
+ $("en").setAttribute("aria-pressed",lang==="en");$("hi").setAttribute("aria-pressed",lang==="hi");document.documentElement.lang=lang;
+ $("chatH").textContent=u.chatH;$("q").placeholder=u.ph;$("send").textContent=u.send;$("newChat").textContent=u.newc;
+ const ch=$("chips");ch.replaceChildren();u.chips.forEach(c=>{const b=mk("button",c,"btn sm");b.type="button";b.onclick=()=>sendChat(c);ch.append(b)});
+ $("noticeTxt").textContent=u.nokey;$("notice").hidden=anyKey()}
+$("shot").onchange=e=>{diagnose(e.target.files[0]);e.target.value=""};
+$("pick").onchange=e=>{diagnose(e.target.files[0]);e.target.value=""};
+for(const l of ["en","hi"])$(l).onclick=()=>{lang=l;S.lang=l;saveS();chrome();if(data)translate()};
+$("askForm").onsubmit=e=>{e.preventDefault();sendChat($("q").value)};
+$("newChat").onclick=()=>{chat=[];$("log").replaceChildren();$("meter").textContent=""};
+
+/* ---------- settings ---------- */
+function msg(id,text,ok){const e=$(id);e.textContent=text;e.className="help "+(ok===true?"ok":ok===false?"bad":"")}
+function usageLine(){const e=$("usage");if(e)e.textContent=`This session: ${sessTok} tokens`}
+function renderModels(){const box=$("mlist");box.replaceChildren();
+ S.models.forEach((m,i)=>{const r=mk("div",null,"mrow"),col=mk("div",null,"id");col.append(document.createTextNode(m.id));
+  col.append(mk("div",PROV[m.p].name+(m.st?" · "+m.st:""),"st "+(m.st==="works"?"ok":m.st&&m.st!=="checking..."?"bad":"")));
+  r.append(mk("span",String(i+1),"n"),col);
+  const lb=mk("label"),cb=mk("input");cb.type="checkbox";cb.checked=!!m.vision;cb.onchange=()=>{m.vision=cb.checked;saveS()};lb.append(cb,document.createTextNode("sees photos"));r.append(lb);
+  const mkb=(txt,fn,aria)=>{const b=mk("button",txt,"btn sm");b.type="button";b.setAttribute("aria-label",aria);b.onclick=fn;return b};
+  r.append(mkb("↑",()=>{if(i>0){[S.models[i-1],S.models[i]]=[S.models[i],S.models[i-1]];saveS();renderModels()}},"Move up"),
+   mkb("↓",()=>{if(i<S.models.length-1){[S.models[i+1],S.models[i]]=[S.models[i],S.models[i+1]];saveS();renderModels()}},"Move down"),
+   mkb("✕",()=>{S.models.splice(i,1);saveS();renderModels();if(avail.length)showBrowse()},"Remove"));box.append(r)})}
+async function pingModel(m){try{
+ const r=await fetch(PROV[m.p].base+"/chat/completions",{method:"POST",headers:hdr(m.p),body:JSON.stringify({model:m.id,messages:[{role:"user",content:"Reply with: OK"}],max_tokens:200})});
+ const j=await r.json().catch(()=>null),em=errMsg(j);
+ if(r.status===401)return{ok:false,msg:"key not accepted"};
+ if(r.status===402)return{ok:false,msg:"needs credit (use a free model)"};
+ if(!r.ok||!j||em)return{ok:false,msg:"HTTP "+r.status+(em?": "+em:"")};
+ const c=j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content;return(typeof c==="string"&&c.trim())?{ok:true}:{ok:false,msg:"empty reply (a thinking model; photo diagnosis may fail)"}}
+ catch(e){return{ok:false,msg:"no connection or blocked by the browser"}}}
+async function checkModels(){const btn=$("checkModels");btn.disabled=true;let good=0,n=0;
+ for(const m of S.models){if(!hasKey(m.p)){m.st="no key added";continue}n++;m.st="checking...";renderModels();
+  const r=await pingModel(m);m.st=r.ok?"works":clip(r.msg,110);if(r.ok){good++;bad.delete(m.p+m.id)}renderModels();await new Promise(z=>setTimeout(z,400))}
+ S.models=[...S.models.filter(m=>m.st==="works"),...S.models.filter(m=>m.st!=="works")];saveS();renderModels();btn.disabled=false;
+ msg("modelMsg",n?`${good} of ${n} models work with your keys. Working ones are now first. Remove failing ones with the x button.`:"Add an API key first.",good>0)}
+let avail=[];
+async function browse(){const p=$("bp").value;msg("bmsg","Loading...");
+ try{let l=[];
+  if(p==="or"){const j=await(await fetch(PROV.or.base+"/models")).json();
+   l=(j.data||[]).map(m=>({p,id:m.id,vision:((m.architecture&&m.architecture.input_modalities)||[]).includes("image"),free:Number(m.pricing&&m.pricing.prompt)===0&&Number(m.pricing&&m.pricing.completion)===0}))}
+  else{if(!hasKey(p)){msg("bmsg","Add and save your "+PROV[p].name+" key first.",false);return}
+   const r=await fetch(PROV[p].base+"/models",{headers:{Authorization:"Bearer "+S.keys[p]}});if(!r.ok)throw 0;const j=await r.json();
+   l=(j.data||[]).map(m=>String(m.id).replace(/^models\//,"")).filter(id=>p==="gg"?/^(gemini|gemma)/.test(id)&&!/embed|tts|image|live|audio|aqa|imagen|veo/.test(id):!/whisper|tts|playai|guard|orpheus/.test(id))
+    .map(id=>({p,id,vision:p==="gg"?/^gemini/.test(id):/llama-4|vision|scout|maverick/.test(id)}))}
+  avail=l;showBrowse()}catch(e){avail=[];$("blist").replaceChildren();msg("bmsg","Could not load the list. Check your key and internet.",false)}}
+function showBrowse(){const f=$("bf").value.trim().toLowerCase(),free=$("bfree").checked&&$("bp").value==="or";
+ const rows=avail.filter(m=>(!f||m.id.toLowerCase().includes(f))&&(!free||m.free)).sort((a,b)=>(b.vision-a.vision)||(a.id<b.id?-1:1));
+ const box=$("blist");box.replaceChildren();
+ rows.slice(0,60).forEach(m=>{const r=mk("div",null,"mrow"),c=mk("div",null,"id");c.append(document.createTextNode(m.id));
+  c.append(mk("div",[m.vision?"sees photos":"text only",m.p==="or"?(m.free?"free":"paid, needs credit"):""].filter(Boolean).join(" · "),"st"));
+  const have=S.models.some(x=>x.p===m.p&&x.id===m.id),b=mk("button",have?"Added":"Add","btn sm");b.type="button";b.disabled=have;
+  b.onclick=()=>{S.models.push({p:m.p,id:m.id,vision:m.vision});saveS();renderModels();showBrowse()};r.append(c,b);box.append(r)});
+ msg("bmsg",`${rows.length} models${rows.length>60?" (showing 60, type in the filter to narrow)":""}. Tap Add to put one at the end of your list.`)}
+function keyBlock(p){const d=mk("div");d.style.marginTop="14px";
+ const lb=mk("label",PROV[p].name,"f");lb.htmlFor="key_"+p;lb.style.marginTop="0";
+ const inp=mk("input");inp.type="password";inp.id="key_"+p;inp.autocomplete="off";inp.spellcheck=false;inp.value=S.keys[p];inp.placeholder="Paste key";
+ inp.onchange=()=>{S.keys[p]=inp.value.trim();saveS();chrome()};
+ const nt=mk("p",PROV[p].note+" ","help"),a=mk("a","Get a key");a.href=PROV[p].link;a.target="_blank";a.rel="noopener";nt.append(a);
+ const row=mk("div",null,"row");row.style.marginTop="8px";
+ const bs=mk("button","Show","btn sm"),bt=mk("button","Test key","btn sm grn"),bc=mk("button","Remove","btn sm red");[bs,bt,bc].forEach(b=>b.type="button");
+ bs.onclick=()=>{inp.type=inp.type==="password"?"text":"password";bs.textContent=inp.type==="password"?"Show":"Hide"};
+ bc.onclick=()=>{S.keys[p]="";inp.value="";saveS();chrome();msg("km_"+p,"Key removed from this browser.")};
+ bt.onclick=async()=>{S.keys[p]=inp.value.trim();saveS();chrome();if(!S.keys[p]){msg("km_"+p,"Paste your key first.",false);return}
+  msg("km_"+p,"Checking...");
+  try{const r=await fetch(PROV[p].base+(p==="or"?"/key":"/models"),{headers:{Authorization:"Bearer "+S.keys[p]}});
+   if([400,401,403].includes(r.status)){msg("km_"+p,"This key was not accepted. Copy it again from the provider.",false);return}
+   if(!r.ok)throw 0;let x="";if(p==="or"){const j=((await r.json()).data)||{};x=(j.is_free_tier?" Free tier account.":"")+(j.limit_remaining!=null?` Credit left: ${j.limit_remaining}.`:"")}
+   msg("km_"+p,"Key works."+x,true)}
+  catch(e){msg("km_"+p,"Could not reach "+PROV[p].name+". Check your internet.",false)}};
+ row.append(bs,bt,bc);const m=mk("p",null,"help");m.id="km_"+p;m.setAttribute("aria-live","polite");d.append(lb,inp,nt,row,m);return d}
+function bindNum(id,key,lo,hi){const e=$(id);e.value=S[key];e.onchange=()=>{let v=Math.round(Number(e.value));if(!isFinite(v))v=DEF[key];v=Math.min(hi,Math.max(lo,v));S[key]=v;e.value=v;saveS()}}
+function initSettings(){
+ Object.keys(PROV).forEach(p=>$("keys").append(keyBlock(p)));
+ for(const id of ["bp","addP"])Object.keys(PROV).forEach(p=>{const o=mk("option",PROV[p].name);o.value=p;$(id).append(o)});
+ $("bgo").onclick=browse;$("bf").oninput=()=>{if(avail.length)showBrowse()};$("bfree").onchange=()=>{if(avail.length)showBrowse()};$("bp").onchange=()=>{avail=[];$("blist").replaceChildren();msg("bmsg","")};
+ $("addModel").onclick=()=>{const id=$("newModel").value.trim().replace(/^models\//,""),p=$("addP").value;
+  if(!/^[\w.\-\/:]{3,120}$/.test(id)){msg("addMsg","Use the exact model name from the provider, with no spaces.",false);return}
+  if(S.models.some(m=>m.p===p&&m.id===id)){msg("addMsg","That model is already in the list.",false);return}
+  S.models.push({p,id,vision:$("newVision").checked});saveS();$("newModel").value="";renderModels();msg("addMsg","Added to the end of the list.",true)};
+ $("checkModels").onclick=checkModels;
+ $("resetModels").onclick=()=>{S.models=SEED.map(m=>({...m}));saveS();renderModels();msg("modelMsg","List reset.")};
+ $("resetLimits").onclick=()=>{for(const k of ["maxOut","chatOut","turns","budget","img"]){S[k]=DEF[k];$(k).value=DEF[k]}saveS()};
+ bindNum("maxOut","maxOut",200,2000);bindNum("chatOut","chatOut",100,1000);bindNum("turns","turns",1,12);bindNum("budget","budget",600,8000);bindNum("img","img",384,1280);
+ renderModels();usageLine()}
+function route(){const s=location.hash==="#settings";$("home").hidden=s;$("settings").hidden=!s;window.scrollTo(0,0);if(!s)chrome()}
+$("back").onclick=e=>{e.preventDefault();location.hash="";history.pushState("",document.title,location.pathname+location.search);route()};
+window.addEventListener("hashchange",route);
+chrome();initSettings();route();
+</script>
+</body></html>
